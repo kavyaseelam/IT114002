@@ -17,6 +17,8 @@ import java.awt.*;
 import javax.swing.*; 
 
 public class serverUI {
+	protected static Server server;
+
 	@SuppressWarnings("restriction")
 	public static void main(String[] args) {
 		//create frame
@@ -41,7 +43,6 @@ public class serverUI {
 		
 		t1.setFont(font1);
 		t2.setFont(font1);
-		t1.setText("this is the chat area");
 		t2.setText("this is the game area");
 		
 		
@@ -91,6 +92,11 @@ public class serverUI {
 					t1.append("\n" + textField.getText());
 					textField.setText("");
 				}
+				
+				server = new Server();
+				long id = 1;
+				server.broadcast(message, id);
+				
 			}
 			
 		});
@@ -104,6 +110,9 @@ public class serverUI {
 		
 		frame.pack();
 		frame.setVisible(true);
+		
+		server = new Server();
+		server.start(3002);
 	}
 }
 

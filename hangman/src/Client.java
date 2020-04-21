@@ -3,12 +3,49 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Client {
 	Socket server;
 	
-	public void connect(String address, int port) {
+	private OnReceive switchListener;
+	public void registerSwitchListener(OnReceive listener) {
+		this.switchListener = listener;
+	}
+	private OnReceive messageListener;
+	public void registerMessageListener(OnReceive listener) {
+		this.messageListener = listener;
+	}
+	private Queue<Payload> toServer = new LinkedList<Payload>();
+	private Queue<Payload> fromServer = new LinkedList<Payload>();
+	
+	public static Client connect(String address, int port) {
+		final Client client = new Client();
+		client._connect(address, port);
+		Thread clientThread =  new Thread() {
+			@Override
+			public void run() {
+				try {
+					client.start();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		clientThread.start();
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return client;
+	}
+	
+	
+	public void _connect(String address, int port) {
 		try {
 			server = new Socket(address, port);
 			System.out.println("Client connected");
@@ -176,4 +213,19 @@ public class Client {
 		}
 	}
 
+
+	public void postConnectionData() {
+		Payload payload = new Payload();
+		payload.setPayloadType(PayloadType.CONNECT);
+		//payload.IsOn(isOn);
+		toServer.add(payload);
+		
+	}
+
+}
+
+interface OnReceive {
+	
+	void onReceivedSwitch(boolean isOn);
+	void onReceivedMessage(String msg);
 }

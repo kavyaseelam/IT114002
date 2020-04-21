@@ -18,7 +18,7 @@ public class Server {
 	private List<ServerThread> clients = new ArrayList<ServerThread>();
 	//We'll use a queue and a thread to separate our chat history
 	Queue<String> messages = new LinkedList<String>();
-	private void start(int port) {
+	void start(int port) {
 		this.port = port;
 		startQueueReader();
 		//sample score save, why not here?
