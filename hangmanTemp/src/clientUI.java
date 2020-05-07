@@ -18,7 +18,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-@SuppressWarnings({ "restriction", "serial" })
 public class clientUI extends JFrame implements OnReceive{
 	
 	static Client client;
@@ -45,12 +44,12 @@ public class clientUI extends JFrame implements OnReceive{
     }
 	
 	
-	@SuppressWarnings("restriction")
+
 	public static void main(String[] args) {
 		//create frame
-		@SuppressWarnings("restriction")
-		JFrame frame = new JFrame("Client");
-		frame.setLayout(new BorderLayout());
+
+		//JFrame frame = new JFrame("Client");
+		//frame.setLayout(new BorderLayout());
 		
 		final clientUI window = new clientUI();
 		window.setLayout(new BorderLayout());
@@ -107,7 +106,7 @@ public class clientUI extends JFrame implements OnReceive{
 		gameArea.add(draw, BorderLayout.CENTER);
 		
 		//create text area for messages
-		final JTextArea t1 = new JTextArea();
+		JTextArea t1 = new JTextArea();
 		chat = t1;
 		
 		Font font1 = new Font("SansSerif", Font.BOLD, 20);
@@ -154,13 +153,14 @@ public class clientUI extends JFrame implements OnReceive{
 				if(message.length() > 0) {
 					//append a newline and the text from the textfield
 					//to that textarea (simulate simple chatroom)
-					t1.append("\n" + textField.getText());
+					//t1.append("\n" + textField.getText());
 					textField.setText("");
+					client.sendMessage(message);
 				}
 				
 				// send message to server
 				//client = new Client();
-				client.sendMessage(message);
+				
 			}
 			
 		});
@@ -181,25 +181,13 @@ public class clientUI extends JFrame implements OnReceive{
 		    	if(_port > -1) {
 			    	client = Client.connect(host.getText(), _port);
 			    	
-			    	//METHOD 1 Using the interface
-			    	//client.registerListeners(window);
-			    	//METHOD 2 Lamba Expression (unnamed function to handle callback)
-			    	/*client.registerListener(()->{	
-			    		if(UISample.toggle != null) {
-			    			UISample.toggle.setText("OFF");
-			    			UISample.toggle.setBackground(Color.RED);
-			    		}
-			    	});*/
-			    	
-			    	
-			    	//trigger any one-time data after client connects
-			    	
 			    	//register our history/message listener
 			    	client.registerListeners(window);
-			    	client.postConnectionData();
+			    	//client.postConnectionData();
 			    	connect.setEnabled(false);
 			    	
 			    	t1.setText("player is connected");
+			    	t1.append(System.lineSeparator());
 			    	//click.setEnabled(true);
 			    	
 			    	
@@ -232,7 +220,7 @@ public class clientUI extends JFrame implements OnReceive{
 
 	@Override
 	public void onReceivedMessage(String msg) {
-		System.out.println("test");
+		System.out.println(msg);
 		chat.append(msg);
 		chat.append(System.lineSeparator());
 	}

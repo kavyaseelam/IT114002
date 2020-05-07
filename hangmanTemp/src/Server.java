@@ -9,11 +9,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import com.google.gson.Gson;
 
 
 public class Server {
-	int port = 3002;
+	int port = 3005;
 	public static boolean isRunning = true;
 	private List<ServerThread> clients = new ArrayList<ServerThread>();
 	//We'll use a queue and a thread to separate our chat history
