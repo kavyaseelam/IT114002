@@ -85,14 +85,14 @@ public class Client {
 								p.setPayloadType(PayloadType.MESSAGE);
 								out.writeObject(p);
 							}
-							else {
+							/*else {
 								System.out.println("Stopping input thread");
 								//we're quitting so tell server we disconnected so it can broadcast
 								p.setPayloadType(PayloadType.DISCONNECT);
 								p.setMessage("bye");
 								out.writeObject(p);
 								break;
-							}
+							}*/
 						}
 					}
 					catch(Exception e) {
@@ -194,7 +194,7 @@ public class Client {
 					String.format("%s", payload.getMessage())
 			);
 			if(onReceiveListener != null) {
-				onReceiveListener.onReceivedMessage(msg);
+				onReceiveListener.onReceivedMessage(payload.getMessage());
 			}
 			break;
 		default:
@@ -212,17 +212,6 @@ public class Client {
 			}
 		}
 	}
-	public static void main(String[] args) {
-		Client client = new Client();
-		client.connect("127.0.0.1", 3002);
-		try {
-			//if start is private, it's valid here since this main is part of the class
-			client.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 
 	public void postConnectionData() {
 		Payload payload = new Payload();

@@ -25,10 +25,8 @@ public class serverUI {
 	protected static Server server;
 	static hang hang;
 
-	@SuppressWarnings("restriction")
 	public static void main(String[] args) {
 		//create frame
-		@SuppressWarnings("restriction")
 		final
 		JFrame frame = new JFrame("Server");
 		frame.setLayout(new BorderLayout());
@@ -99,18 +97,12 @@ public class serverUI {
 					//to that textarea (simulate simple chatroom)
 					t1.append("\n" + textField.getText());
 					textField.setText("");
+					//server = new Server();
+					long id = 1;
+					server.broadcast(message, id);
 				}
-			
-				
-				
-				//server = new Server();
-				long id = 1;
-				server.broadcast(message, id);
-				
-				
 				
 			}
-			
 		});
 		
 		userInput.add(textField);
@@ -123,9 +115,15 @@ public class serverUI {
 		frame.add(serverFrame, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
+		Thread serverThread = new Thread() {
+			@Override
+			public void run() {
+				server = new Server();
+				server.start(3005);
+			}
+		};
+		serverThread.start();
 		
-		server = new Server();
-		server.start(3002);
 	}
 }
 
